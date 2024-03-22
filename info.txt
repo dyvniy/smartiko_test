@@ -1,0 +1,10 @@
+mosquitto_sub -h localhost -t test/topic
+mosquitto_pub -h localhost -t test/topic -m "hello world"
+
+sudo systemctl restart mosquitto
+
+# mosquitto examples
+https://medium.com/gravio-edge-iot-platform/how-to-set-up-a-mosquitto-mqtt-broker-securely-using-client-certificates-82b2aaaef9c8
+
+# paho mqtt examples
+https://medium.com/@idirubavathy/mqtt-application-using-paho-mqtt-c-library-c994b551b89e
