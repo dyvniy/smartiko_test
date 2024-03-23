@@ -8,6 +8,7 @@
 #include <iostream>
 #include <memory>
 #include <string>
+#include <vector>
 
 #include "mymqttpublisher.h"
 #include "dataemulator.h"
@@ -49,6 +50,18 @@ namespace my_program_state
     now()
     {
         return std::time(0);
+    }
+
+    std::vector<std::string> parse(std::string data, char separator = ';')
+    {
+        std::vector<std::string> params;
+        std::istringstream f(data);
+        std::string s;
+        while (getline(f, s, separator)) {
+            //std::cout << s << std::endl;
+            params.push_back(s);
+        }
+        return params;
     }
 }
 
@@ -111,29 +124,43 @@ private:
         response_.version(request_.version());
         response_.keep_alive(false);
 
+        std::string args;
+        auto target = my_program_state::parse(request_.target(), '?');
+        if (target.size()>1) {
+            args = target[1];
+        }
+
         switch(request_.method())
         {
         case http::verb::get:
             response_.result(http::status::ok);
             response_.set(http::field::server, "Beast");
-            create_response();
-            my_program_state::publisher.send(my_program_state::emulator.get());
+            create_response_get();
+            my_program_state::publisher.send(my_program_state::emulator.get(args));
             break;
 
         case http::verb::delete_:
             response_.result(http::status::ok);
             response_.set(http::field::server, "Beast");
             create_response_del();
-            my_program_state::publisher.send(my_program_state::emulator.delete_());
+            my_program_state::publisher.send(my_program_state::emulator.delete_(args));
             break;
 
         case http::verb::post:
+        {
             // args, data
             // request_.
             response_.result(http::status::ok);
             response_.set(http::field::server, "Beast");
             create_response_post();
-            my_program_state::publisher.send(my_program_state::emulator.post());
+            //
+            auto & body = request_.body();
+            auto body_str = boost::beast::buffers_to_string(body.data());
+            if (args.length() >0){
+                body_str += "?" + args;
+            }
+            my_program_state::publisher.send(my_program_state::emulator.post(body_str));
+        }
             break;
 
         default:
@@ -153,9 +180,10 @@ private:
 
     // Construct a response message based on the program state.
     void
-    create_response()
+    create_response_get()
     {
-        if(request_.target() == "/count")
+        auto target = my_program_state::parse(request_.target(), '?');
+        if(target[0] == "/count")
         {
             response_.set(http::field::content_type, "text/html");
             beast::ostream(response_.body())
@@ -169,7 +197,7 @@ private:
                 <<  "</body>\n"
                 <<  "</html>\n";
         }
-        else if(request_.target() == "/time")
+        else if(target[0] == "/time")
         {
             response_.set(http::field::content_type, "text/html");
             beast::ostream(response_.body())
@@ -183,10 +211,6 @@ private:
                 <<  "</body>\n"
                 <<  "</html>\n";
         }
-        else if(request_.target().find("/count") > 0)
-        {
-            //
-        }
         else
         {
             response_.result(http::status::not_found);
@@ -199,21 +223,18 @@ private:
     void
     create_response_del()
     {
-        if(request_.target() == "/count")
+        auto target = my_program_state::parse(request_.target(), '?');
+        if(target[0] == "/count")
         {
             response_.set(http::field::content_type, "text/html");
             beast::ostream(response_.body())
                 <<  my_program_state::decrease_count();
         }
-        else if(request_.target() == "/time")
+        else if(target[0] == "/time")
         {
             response_.set(http::field::content_type, "text/html");
             beast::ostream(response_.body())
                 <<  my_program_state::now();
-        }
-        else if(request_.target().find("/count") > 0)
-        {
-            //
         }
         else
         {
@@ -227,8 +248,9 @@ private:
     void
     create_response_post()
     {
+        auto target = my_program_state::parse(request_.target(), '?');
         auto it = request_.body();
-        if(request_.target() == "/count")
+        if(target[0] == "/count")
         {
             response_.set(http::field::content_type, "text/html");
             beast::ostream(response_.body())
@@ -236,7 +258,7 @@ private:
                 // << request_.messag
                 << my_program_state::set_count(10);
         }
-        else if(request_.target() == "/time")
+        else if(target[0] == "/time")
         {
             response_.set(http::field::content_type, "text/html");
             beast::ostream(response_.body())

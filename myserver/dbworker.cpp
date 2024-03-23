@@ -34,13 +34,13 @@ struct DbWorker::Impl{
         return true;
     }
 
-    static std::vector<std::string> parce(std::string data, char separator = ';')
+    static std::vector<std::string> parse(std::string data, char separator = ';')
     {
         std::vector<std::string> params;
         std::istringstream f(data);
         std::string s;
         while (getline(f, s, separator)) {
-            std::cout << s << std::endl;
+            // std::cout << s << std::endl;
             params.push_back(s);
         }
         return params;
@@ -61,7 +61,7 @@ DbWorker::~DbWorker()
 
 bool DbWorker::insert(std::string data)
 {
-    std::vector<std::string> params = pImpl->parce(data);
+    std::vector<std::string> params = pImpl->parse(data);
     std::string query{"INSERT INTO public.readingsb("
                       "name, gpoup, acure_d, acure_t, graduated) "
                       "VALUES ("};
@@ -76,7 +76,7 @@ bool DbWorker::insert(std::string data)
 
 bool DbWorker::get(std::string data)
 {
-    std::vector<std::string> params = pImpl->parce(data);
+    std::vector<std::string> params = pImpl->parse(data);
     std::string query{"SELECT * FROM public.readingsb WHERE "};
     pqxx::work xact(*pImpl->pConn, "SampleSelect");
     pqxx::result res;
@@ -107,7 +107,7 @@ bool DbWorker::get(std::string data)
 
 bool DbWorker::delete_(std::string data)
 {
-    std::vector<std::string> params = pImpl->parce(data);
+    std::vector<std::string> params = pImpl->parse(data);
     std::string query{"DELETE FROM public.readingsb WHERE "};
     // fields "name, gpoup, acure_d, acure_t, graduated)"
 
@@ -143,15 +143,30 @@ bool DbWorker::exec(boost::property_tree::ptree pt)
 
 bool DbWorker::insert(boost::property_tree::ptree pt)
 {
-    return true;
+    return false;
 }
 
 bool DbWorker::get(boost::property_tree::ptree pt)
 {
-    return true;
+    return false;
 }
 
 bool DbWorker::delete_(boost::property_tree::ptree pt)
 {
-    return true;
+    return false;
+}
+
+bool DbWorker::insert(std::string dbname, dataPairs data)
+{
+    return false;
+}
+
+bool DbWorker::get(std::string dbname, dataPairs where)
+{
+    return false;
+}
+
+bool DbWorker::delete_(std::string dbname, dataPairs where)
+{
+    return false;
 }

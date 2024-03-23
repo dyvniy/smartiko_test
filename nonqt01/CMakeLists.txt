@@ -21,7 +21,7 @@ set_target_properties(pahottpp PROPERTIES IMPORTED_LOCATION ${paho-mqttpp3})
 add_library(pahomqtt3a SHARED IMPORTED)
 set_property(TARGET pahomqtt3a PROPERTY IMPORTED_LOCATION ${paho-mqtt3a})
 
-add_executable(nonqt01 main.cpp paho_mqtt.h paho_mqtt.cpp
+add_executable(nonqt01 main.cpp
     mymqttpublisher.cpp mymqttpublisher.h
     dataemulator.cpp dataemulator.h
     jsonutils.cpp jsonutils.h

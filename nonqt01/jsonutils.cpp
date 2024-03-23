@@ -71,7 +71,7 @@ std::string JsonUtils::toString(const ptree &pt)
 
 // #include <boost/property_tree/ptree.hpp>
 // #include <boost/property_tree/json_parser.hpp>
-ptree JsonUtils::parceJson(std::string json)
+ptree JsonUtils::parseJson(std::string json)
 {
   std::stringstream ss;
   ss << json;

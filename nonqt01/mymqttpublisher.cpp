@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <cstring>
+#include <vector>
 #include "mqtt/async_client.h"
 
 
@@ -24,7 +25,7 @@ public:
 
     void delivery_complete(mqtt::delivery_token_ptr token) override
     {
-        std::cout << "Message delivered" << std::endl;
+        std::cout << "MQTT message delivered" << std::endl;
     }
 };  // PublisherCallback
 
@@ -63,7 +64,6 @@ int main_pub(std::string message = "test msg")
 } // MyMqttPublisher_ns
 
 struct MyMqttPublisher::Impl {
-
 };
 
 

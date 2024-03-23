@@ -4,7 +4,6 @@
 class MyMqttSubscriber
 {
 public:
-    MyMqttSubscriber() {}
     static int main_subscriber();
 };
 

@@ -13,7 +13,7 @@ namespace MyMqttSubscriber_ns {
 
 DbWorker db;
 
-boost::property_tree::ptree parceJson(std::string json)
+boost::property_tree::ptree parseJson(std::string json)
 {
   std::stringstream ss;
   ss << json;
@@ -39,7 +39,7 @@ public:
         std::cout << "Message arrived: " << payload << std::endl;
         if (payload.find("{") == 0) {
             // json
-            boost::property_tree::ptree pt = parceJson(payload);
+            boost::property_tree::ptree pt = parseJson(payload);
             db.exec(pt);
             std::cout << "json" << std::endl;
         }
@@ -59,7 +59,7 @@ public:
 
     void delivery_complete(mqtt::delivery_token_ptr token) override
     {
-        std::cout << "Message delivered" << std::endl;
+        std::cout << "MQTT message delivered" << std::endl;
     }
 };
 

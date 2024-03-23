@@ -12,7 +12,7 @@ class JsonUtils
 public:
     static void printTree(boost::property_tree::ptree &pt, int level = 0);
     static std::string toString(const boost::property_tree::ptree &pt);
-    static boost::property_tree::ptree parceJson(std::string json);
+    static boost::property_tree::ptree parseJson(std::string json);
     static boost::property_tree::ptree simpleArray();
     static boost::property_tree::ptree arrayOverObjects();
 };

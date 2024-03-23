@@ -63,28 +63,36 @@ DataEmulator::DataEmulator()
         auto pt2 = JsonUtils::arrayOverObjects();
         auto s2 = JsonUtils::toString(pt2);
         std::cout << s2 << std::endl;
-        auto pt3 = JsonUtils::parceJson(s2);
+        auto pt3 = JsonUtils::parseJson(s2);
         auto s3 = JsonUtils::toString(pt3);
         std::cout << s3 << std::endl;
     }
 }
 
-std::string DataEmulator::post()
+std::string DataEmulator::post(std::string args)
 {
+    // db fields "name, gpoup, acure_d, acure_t, graduated)"
+    // db values "VALUES ('val02', 89.90, '2021/12/28', '16:24', False);";
+    std::cout << "post_args: " << args << std::endl;
+
     auto dt = DataEmulator_ns::date_time_format();
     std::stringstream ss;
     ss << "POST; 'val02', 89.90, '"
        << dt[0] << "', '" << dt[1]
-       <<"', False";
+       <<"', True";
     return ss.str();
 }
 
-std::string DataEmulator::get()
+std::string DataEmulator::get(std::string args)
 {
-    return  "GET; name = 'val02'";
+    std::cout << "get_args: " << args << std::endl;
+
+    return  std::string("GET;") + args;
 }
 
-std::string DataEmulator::delete_()
+std::string DataEmulator::delete_(std::string args)
 {
+    std::cout << "delete_args: " << args << std::endl;
+
     return "DELETE; name = 'valjhbgm n'";
 }
