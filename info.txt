@@ -1,10 +1,73 @@
+# g++ needs to develop
+sudo apt update
+sudo apt install build-essential
+
+# install boost
+sudo apt install libboost1.81-dev
+
+# build system
+sudo apt install ninja
+
+# C++ library to work with pqxx, don't remember does it works
+sudo apt install libpqxx-6.4
+# or clone 
+git clone https://github.com/jtv/libpqxx
+git checkout tags/6.4.5  # sync version
+
+# to clone GIT repos, you have made it already
+sudo apt install git
+# to build CMakeLists.txt projects
+sudo apt install make
+sudo apt install cmake
+
+# C++ mqtt library. I have build it in qtcreator
+git clone https://github.com/eclipse/paho.mqtt.cpp
+
+# you may clone paho.mqtt.c here, or inside paho.mqtt.cpp dir. It need in C++ project 
+git clone https://github.com/eclipse/paho.mqtt.c.git
+# this version paho.mqtt.c compared with debian 12, I suppose
+#git checkout v1.2.1
+
+# good for develop
+sudo apt install qtcreator
+
+#==================== mosquitto - mqtt queue =======================
+
+# install
+sudo apt-get install mosquitto mosquitto-clients -y
+
+# need start & enable
+sudo systemctl start mosquitto
+sudo systemctl enable mosquitto
+
+# listen topic
 mosquitto_sub -h localhost -t test/topic
+# write into topic
 mosquitto_pub -h localhost -t test/topic -m "hello world"
-
+# restart mostique servece
 sudo systemctl restart mosquitto
-
 # mosquitto examples
 https://medium.com/gravio-edge-iot-platform/how-to-set-up-a-mosquitto-mqtt-broker-securely-using-client-certificates-82b2aaaef9c8
 
 # paho mqtt examples
 https://medium.com/@idirubavathy/mqtt-application-using-paho-mqtt-c-library-c994b551b89e
+
+# ======================= manual test with python3 ==========================
+
+sudo apt install python3-dev
+# debian 12 dislike to install packages with pip
+sudo apt install python3-requests
+sudo apt install python3-IPython  
+
+# run IPython for send requests
+python3 /usr/lib/python3/dist-packages/IPython
+
+#rq  - import requests library, make session (not necessarily)
+import requests as rq
+s = rq.Session()
+
+#gpd - test http requests
+s.get('http://127.0.0.1:1234/count').content
+s.post('http://127.0.0.1:1234/count', {'count': 11}).content
+s.delete('http://127.0.0.1:1234/count').content
+

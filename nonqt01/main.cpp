@@ -242,10 +242,6 @@ private:
             beast::ostream(response_.body())
                 <<  my_program_state::now();
         }
-        else if(request_.target().find("/count") > 0)
-        {
-            //
-        }
         else
         {
             response_.result(http::status::not_found);
@@ -347,5 +343,4 @@ int
 main(int argc, char* argv[])
 {
     return http_main(argc, argv);
-    //return main_pub(); // only for test
 }
