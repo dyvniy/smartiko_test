@@ -71,3 +71,22 @@ s.get('http://127.0.0.1:1234/count&a=10').content
 s.post('http://127.0.0.1:1234/count', {'count': 11}).content
 s.delete('http://127.0.0.1:1234/time').content
 
+# ================== docker ====================
+
+https://itslinuxfoss.com/install-use-docker-debian-12-linux/
+sudo apt install docker.io -y
+
+docker exec -it 7c06dd252063 bash  # enter intu container's consile
+
+# run container based on poetgreSql 
+docker run --name db-data-analysis -e POSTGRES_PASSWORD=123456 -d postgres
+
+docker inspect 7c06dd252063 # find ip addres, now 172.14.0.2
+
+# copy file into container
+docker cp "/home/nv/Documents/smartiko_test/release/libpaho-mqtt3as.so.1" 7c06dd252063:"/home/libpaho-mqtt3as.so.1"
+
+docker ps # see running images
+docker ps -a # not running too
+
+
