@@ -8,7 +8,7 @@
 
 namespace MyMqttPublisher_ns {
 
-const std::string SERVER_ADDRESS("tcp://localhost:1883");
+const std::string SERVER_ADDRESS("tcp://172.17.0.2:1883");
 const std::string CLIENT_ID("publisher");
 const std::string TOPIC("test/topic");
 mqtt::async_client client(SERVER_ADDRESS, CLIENT_ID);

@@ -68,7 +68,7 @@ public:
 
 int MyMqttSubscriber::main_subscriber()
 {
-    const std::string SERVER_ADDRESS("tcp://localhost:1883");
+    const std::string SERVER_ADDRESS("tcp://172.17.0.2:1883");
     const std::string CLIENT_ID("subscriber");
     const std::string TOPIC("test/topic");
     const int QOS = 1;

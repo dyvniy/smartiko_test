@@ -77,13 +77,16 @@ bool DbWorker::insert(std::string data)
 bool DbWorker::get(std::string data)
 {
     std::vector<std::string> params = pImpl->parse(data);
-    std::string query{"SELECT * FROM public.readingsb WHERE "};
+    std::string query{"SELECT * FROM public.readingsb"};
     pqxx::work xact(*pImpl->pConn, "SampleSelect");
     pqxx::result res;
     try {
         // fields "name, gpoup, acure_d, acure_t, graduated)"
 
         // looks like "name = 'value1' AND group < 3;"
+        if (params.size() > 1){
+             query += " WHERE ";
+        }
         for (int i=1; i<params.size(); ++i){
             query += params[i];
         }
