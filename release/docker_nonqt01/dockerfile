@@ -1,0 +1,12 @@
+FROM ubuntu
+LABEL maintainer="dyvniy@yandex.ru"
+# RUN apt update && apt upgrade
+# COPY ../libs /app
+COPY . /app
+
+# port for http acssess
+EXPOSE 1234
+
+WORKDIR /app/
+ENTRYPOINT /app/run1.sh
+CMD tcp://172.17.0.2:1883

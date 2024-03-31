@@ -66,15 +66,15 @@ public:
 } // MyMqttSubscriber_ns
 
 
-int MyMqttSubscriber::main_subscriber()
+int MyMqttSubscriber::main_subscriber(std::string serverAddress, std::string clientId)
 {
-    const std::string SERVER_ADDRESS("tcp://172.17.0.2:1883");
-    const std::string CLIENT_ID("subscriber");
+    //const std::string SERVER_ADDRESS("tcp://172.17.0.2:1883");
+    //const std::string CLIENT_ID("subscriber");
     const std::string TOPIC("test/topic");
     const int QOS = 1;
     const int TIMEOUT = 10000;
 
-    mqtt::async_client client(SERVER_ADDRESS, CLIENT_ID);
+    mqtt::async_client client(serverAddress, clientId);
 
     mqtt::connect_options connOpts;
     connOpts.set_keep_alive_interval(20);

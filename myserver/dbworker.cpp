@@ -5,18 +5,15 @@
 #include <vector>
 
 struct DbWorker::Impl{
-    int* pInt = nullptr;
     pqxx::connection* pConn{nullptr};
 
     Impl() {
-        pInt = new int(10);
-        pConn = new pqxx::connection("user=postgres password=123456 host=127.0.0.1 port=5432 "
+        pConn = new pqxx::connection("user=postgres password=123456 host=172.17.0.3 port=5432 "
                                  "dbname=postgres target_session_attrs=read-write");
         std::cout << pConn << std::endl;
         std::cout << pConn->server_version() << std::endl;
     }
     ~Impl() {
-        delete pInt;
         delete pConn;
     }
 
@@ -27,6 +24,10 @@ struct DbWorker::Impl{
         try {
             res = xact.exec(query);
             xact.commit();
+        } catch (pqxx::pqxx_exception& e) {
+            std::cerr << "Failed to execute query: " << query
+                      << std::endl << e.base().what() << std::endl;
+            return false;
         } catch (...) {
             std::cerr << "Failed to execute query: " << query << std::endl;
             return false;
@@ -51,13 +52,28 @@ struct DbWorker::Impl{
 DbWorker::DbWorker()
     :pImpl(new Impl())
 {
-    *pImpl->pInt = 456; // to find crash on wrong init
+    create();
 }
 
 DbWorker::~DbWorker()
 {
 
 }
+
+bool DbWorker::create()
+{
+    std::string query{
+        "CREATE TABLE IF NOT EXISTS readingsb ("
+        "id SERIAL PRIMARY KEY, "
+        "name character varying(100), "
+        "gpoup numeric(5,3), "
+        "acure_d date, "
+        "acure_t time without time zone, "
+        "graduated boolean)"};
+    return pImpl->exec(query);
+}
+
+
 
 bool DbWorker::insert(std::string data)
 {

@@ -1,0 +1,8 @@
+FROM ubuntu
+LABEL maintainer="dyvniy@yandex.ru"
+# RUN apt update && apt upgrade
+# COPY ../libs /app
+COPY . /app
+WORKDIR /app/
+ENTRYPOINT /app/run2.sh
+CMD tcp://172.17.0.2:1883

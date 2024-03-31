@@ -52,6 +52,7 @@ https://medium.com/gravio-edge-iot-platform/how-to-set-up-a-mosquitto-mqtt-broke
 # paho mqtt examples
 https://medium.com/@idirubavathy/mqtt-application-using-paho-mqtt-c-library-c994b551b89e
 
+
 # ======================= manual test with python3 ==========================
 
 sudo apt install python3-dev
@@ -81,12 +82,22 @@ docker exec -it 7c06dd252063 bash  # enter intu container's consile
 # run container based on poetgreSql 
 docker run --name db-data-analysis -e POSTGRES_PASSWORD=123456 -d postgres
 
-docker inspect 7c06dd252063 # find ip addres, now 172.14.0.2
+docker inspect 7c06dd252063 # find ip addres, now 172.14.0.2 for the first, next 3 & so on.
 
 # copy file into container
 docker cp "/home/nv/Documents/smartiko_test/release/libpaho-mqtt3as.so.1" 7c06dd252063:"/home/libpaho-mqtt3as.so.1"
 
-docker ps # see running images
-docker ps -a # not running too
+docker ps  # see running images
+docker ps -a  # not running too
+docker ps -q  # only names
 
+# copy libs. to release & to docker image. 
+cp /home/nv/Documents/build-paho.mqtt.cpp-Desktop-Debug/src/libpaho-mqttpp3.so.1 /home/nv/Documents/smartiko_test/release/libpaho-mqttpp3.so.1
+cp /usr/lib/x86_64-linux-gnu/libpqxx-6.4.so /home/nv/Documents/smartiko_test/release/libpqxx-6.4.so
+docker cp "/home/nv/Documents/smartiko_test/release/libpaho-mqtt3a.so.1" 7c06dd252063:"/home/libpaho-mqtt3a.so.1"
 
+# stop all containers
+docker stop $(docker ps -q)
+
+# run just build container
+docker run $(docker build -q ./) &

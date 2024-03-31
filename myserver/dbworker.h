@@ -15,6 +15,7 @@ public:
 
     DbWorker();
     ~DbWorker();
+    bool create();
     bool insert(std::string data);
     bool get(std::string data);
     bool delete_(std::string data);
